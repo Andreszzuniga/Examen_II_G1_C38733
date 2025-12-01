@@ -30,3 +30,24 @@ resumen_numericas <-
 
 resumen_numericas
 
+# 3) Z-score 
+
+moras <-
+  moras %>%
+  mutate(
+    z_salario = (SALARIO - mean(SALARIO, na.rm = TRUE)) /
+      sd(SALARIO, na.rm = TRUE),
+    z_edad    = (EDAD    - mean(EDAD,    na.rm = TRUE)) /
+      sd(EDAD,    na.rm = TRUE),
+    
+    atipico_salario = case_when(
+      is.na(z_salario)           ~ NA_character_,
+      abs(z_salario) > 1.96      ~ "Si",
+      TRUE                       ~ "No"
+    ),
+    atipico_edad = case_when(
+      is.na(z_edad)              ~ NA_character_,
+      abs(z_edad) > 1.96         ~ "Si",
+      TRUE                       ~ "No"
+    )
+  )
