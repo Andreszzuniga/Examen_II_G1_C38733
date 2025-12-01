@@ -51,3 +51,16 @@ moras <-
       TRUE                       ~ "No"
     )
   )
+# 4) Porcentaje de Na's
+
+faltantes_por_col <-
+  moras %>%
+  summarise(
+    across(
+      everything(),
+      ~ mean(is.na(.x)) * 100,
+      .names = "pct_na_{.col}"
+    )
+  )
+
+faltantes_por_col
