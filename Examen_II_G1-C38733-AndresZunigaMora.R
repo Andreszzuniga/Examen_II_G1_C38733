@@ -117,7 +117,6 @@ moras_imp %>%
   )
 # 7) Porcentaje de morosos categóricas
 
-# Ejemplo: SEXO
 porc_moroso_sexo <-
   moras_imp %>%
   group_by(SEXO_imp, INDICADOR_MOROSO_imp) %>%
@@ -137,3 +136,38 @@ porc_moroso_sexo %>%
     y = "Porcentaje",
     fill = "Moroso"
   )
+# 8) -
+
+promedios_num <-
+  moras_imp %>%
+  group_by(INDICADOR_MOROSO_imp) %>%
+  summarise(
+    salario_mean = mean(SALARIO_imp, na.rm = TRUE),
+    edad_mean    = mean(EDAD_imp,    na.rm = TRUE),
+    .groups = "drop"
+  )
+
+
+promedios_num %>%
+  ggplot(aes(x = INDICADOR_MOROSO_imp,
+             y = salario_mean,
+             fill = INDICADOR_MOROSO_imp)) +
+  geom_col() +
+  labs(
+    title = "Salario promedio según morosidad",
+    x = "Moroso",
+    y = "Salario promedio"
+  ) +
+  guides(fill = "none")
+
+promedios_num %>%
+  ggplot(aes(x = INDICADOR_MOROSO_imp,
+             y = edad_mean,
+             fill = INDICADOR_MOROSO_imp)) +
+  geom_col() +
+  labs(
+    title = "Edad promedio según morosidad",
+    x = "Moroso",
+    y = "Edad promedio"
+  ) +
+  guides(fill = "none")
