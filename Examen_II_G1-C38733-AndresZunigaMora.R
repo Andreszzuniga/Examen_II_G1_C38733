@@ -64,3 +64,33 @@ faltantes_por_col <-
   )
 
 faltantes_por_col
+# 5) Imputación de Na
+
+imputar_media <- function(x) {
+  ifelse(is.na(x), mean(x, na.rm = TRUE), x)
+}
+
+moda <- function(x) {
+  x <- x[!is.na(x)]
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+imputar_moda <- function(x) {
+  ifelse(is.na(x), moda(x), x)
+}
+
+moras_imp <-
+  moras %>%
+  mutate(
+
+    SALARIO_imp = imputar_media(SALARIO),
+    EDAD_imp    = imputar_media(EDAD),
+
+    SEXO_imp                 = imputar_moda(SEXO),
+    TIPO_ASEGURAMIENTO_imp   = imputar_moda(TIPO_ASEGURAMIENTO),
+    SECTOR_imp               = imputar_moda(SECTOR),
+    INDICADOR_ACTIVO_imp     = imputar_moda(INDICADOR_ACTIVO),
+    INDICADOR_EXTRANJERO_imp = imputar_moda(INDICADOR.EXTRANJERO),
+    INDICADOR_MOROSO_imp     = imputar_moda(INDICADOR_MOROSO)
+  )
