@@ -94,3 +94,46 @@ moras_imp <-
     INDICADOR_EXTRANJERO_imp = imputar_moda(INDICADOR.EXTRANJERO),
     INDICADOR_MOROSO_imp     = imputar_moda(INDICADOR_MOROSO)
   )
+# 6) Gráficos
+
+
+moras_imp %>%
+  ggplot(aes(x = SEXO_imp)) +
+  geom_bar() +
+  labs(
+    title = "Cantidad de asegurados por sexo",
+    x = "Sexo",
+    y = "Frecuencia"
+  )
+
+moras_imp %>%
+  ggplot(aes(x = TIPO_ASEGURAMIENTO_imp)) +
+  geom_bar() +
+  coord_flip() +
+  labs(
+    title = "Cantidad por tipo de aseguramiento",
+    x = "Tipo de aseguramiento",
+    y = "Frecuencia"
+  )
+# 7) Porcentaje de morosos categóricas
+
+# Ejemplo: SEXO
+porc_moroso_sexo <-
+  moras_imp %>%
+  group_by(SEXO_imp, INDICADOR_MOROSO_imp) %>%
+  summarise(n = n(), .groups = "drop_last") %>%
+  mutate(porc = 100 * n / sum(n))
+
+porc_moroso_sexo
+
+porc_moroso_sexo %>%
+  ggplot(aes(x = SEXO_imp,
+             y = porc,
+             fill = INDICADOR_MOROSO_imp)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Porcentaje de morosos por sexo",
+    x = "Sexo",
+    y = "Porcentaje",
+    fill = "Moroso"
+  )
